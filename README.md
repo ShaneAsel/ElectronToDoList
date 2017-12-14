@@ -16,5 +16,5 @@ To run the app
 ```javascript
 $ npm start
 ```
-## Screenshot
+# Screenshot
 <img width="393" alt="main" src="https://user-images.githubusercontent.com/8097957/34001499-c6477502-e0b5-11e7-8707-353498fe77a1.PNG">
