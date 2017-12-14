@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Add To-Do List Item</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+</head>
+<body class="blue-grey darken-2">
+    <div class="container">
+        <form>
+            <div>
+                <label style="color:white">Add New To-Do Item</label>
+                <input type="text" id="newTask" autofocus style="color: white;">
+            </div>
+            <button class='btn-floating btn-large waves-effect waves-light teal accent-4' type="submit">Add Task</button>
+        </form>
+    </div>
+    <script>
+        const electron = require('electron');
+        const {ipcRenderer} = electron;
+        const form = document.querySelector('form');
+        
+        form.addEventListener('submit', submitForm);
+
+        function submitForm(e){
+            e.preventDefault();
+            const task = document.querySelector("#newTask").value;
+            ipcRenderer.send("newTask:add", task)
+        }
+
+    </script>
+</body>
+</html>

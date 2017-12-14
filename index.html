@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Shane's Electron To-Do List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+   <!-- <link rel="stylesheet" type="text/css" href="./styles.css">-->
+</head>
+<body class="blue-grey darken-2">
+    <nav>
+        <div class="nav-wrapper blue-grey lighten-1">
+            <a class="brand-logo blue-grey lighten-1" style="color: #00bfa5">To-Do List</a>
+        </div>
+    </nav>
+    <ul id="taskList"></ul>
+    <div style="position: fixed; bottom: 0; padding-bottom: 1%; padding-left: 45%;">
+        <a id='save' class="btn-floating btn-large waves-effect waves-light" style="display:block; margin: 0 1em; background-color: #00bfa5;"><i class="material-icons">save</i></a>
+    </div>
+    <script>
+        const electron = require('electron');
+        const {ipcRenderer} = electron;
+        const ul = document.querySelector('ul');
+        const ipc = electron.ipcRenderer;
+
+        //insert 1 new task to list
+        ipcRenderer.on('newTask:add', function(e, task){
+            ul.className = 'collection';
+            const li = document.createElement('li');
+            li.className = 'collection-item teal lighten-2';
+            const taskText = document.createTextNode(task);
+            li.appendChild(taskText);
+            ul.appendChild(li);
+        });
+
+        //clearing list
+        ipcRenderer.on('task:clear', function(){
+            ul.innerHTML = '';
+            ul.className = '';
+        });
+
+        //remove one task
+        ul.addEventListener('dblclick', removeTask);
+        function removeTask(e){
+            e.target.remove();
+            if(ul.children.length == 0){
+                ul.className = '';
+            }
+        }
+
+        //saving list
+        const {dialog} = require('electron').remote
+        const fs = require('fs')
+        document.getElementById('save').addEventListener('click',function(){
+            dialog.showSaveDialog(function (fileName) {
+                if (fileName === undefined){
+                    console.log("You didn't save the file");
+                    return;
+                }
+                const content = document.getElementById('taskList').innerHTML
+                fs.writeFile(fileName, content, function (err) {
+                    if(err){
+                        alert("An error ocurred creating the file "+ err.message)
+                    }
+                    alert("The file has been succesfully saved");
+                });
+            }); 
+        },false);
+
+        //read in file
+        ipc.on('openFile', (evt,theFile) => {
+            fs.readFile(theFile, 'utf-8', (err, data) =>{
+                if(err) {
+                    console.log("error retreiving data")
+                }
+                const outputList = document.getElementById('taskList')
+                outputList.innerHTML = data
+            })
+        })
+    </script>
+</body>
+</html>
