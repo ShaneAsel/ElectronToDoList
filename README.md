@@ -17,4 +17,4 @@ To run the app
 $ npm start
 ```
 ## Screenshot
-<img width="394" alt="main" src="https://user-images.githubusercontent.com/8097957/34000816-f0ce5158-e0b3-11e7-9288-3bda17484e20.PNG">
+<img width="393" alt="main" src="https://user-images.githubusercontent.com/8097957/34001499-c6477502-e0b5-11e7-8707-353498fe77a1.PNG">
